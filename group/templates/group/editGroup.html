@@ -19,6 +19,13 @@
     <a onclick="history.back()" type="reset" class="btn btn-sm btn-default">
       Cancel
     </a>
+    {% if user_is_owner %}
+    <a href="{% url 'group:delete' group_id %}">
+      <button type="button" class="btn btn-danger btn-xs" style="float:right">
+        Delete This Group
+      </button>
+    </a>
+    {% endif %}
     <br>
     <br>
     <div class="alert alert-dismissable alert-warning">

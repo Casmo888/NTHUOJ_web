@@ -60,7 +60,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'utils.render_helper.CustomHttpExceptionMiddleware',
+    #'utils.render_helper.CustomHttpExceptionMiddleware',
     'axes.middleware.FailedLoginMiddleware',
 )
 

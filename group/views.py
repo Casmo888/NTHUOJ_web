@@ -29,7 +29,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, render
 from django.utils import timezone
 from django.forms.models import model_to_dict
-from group.forms import GroupForm, GroupFormEdit, AnnounceForm
+from group.forms import GroupForm, GroupFormEdit, Coowner_GroupFormEdit, AnnounceForm
 from group.models import Group, Announce
 from utils.user_info import has_group_ownership, has_group_coownership
 from utils.log_info import get_logger
@@ -188,13 +188,14 @@ def detail(request, group_id):
 
 def list(request):
     all_group = Group.objects.order_by('id')
-    unsorted_group_list = Group.objects.filter(Q(member__username__contains=request.user.username) \
-                                             | Q(owner__username=request.user.username) \
-                                             | Q(coowner__username=request.user.username)).distinct()
-    my_group = unsorted_group_list.order_by('id')
-    page = request.GET.get('page')
     if request.user.is_anonymous():
         my_group = []
+    else:
+        unsorted_group_list = Group.objects.filter(Q(member__username__contains=request.user.username) \
+                                             | Q(owner__username=request.user.username) \
+                                             | Q(coowner__username=request.user.username)).distinct()
+        my_group = unsorted_group_list.order_by('id')
+    page = request.GET.get('page')
     paginator = Paginator(all_group, 25)  # Show 25 users per page
     try:
         all_group = paginator.page(page)
@@ -244,7 +245,9 @@ def new(request):
 
 @login_required
 def delete(request, group_id):
-    if request.user.has_judge_auth():
+    group = get_group(group_id)
+
+    if has_group_ownership(request.user, group):
         group = get_group(group_id)
         deleted_gid = group.id
         group.delete()
@@ -257,7 +260,7 @@ def delete(request, group_id):
 def delete_announce(request, announce_id, group_id):
     group = get_group(group_id)
 
-    if has_group_ownership(request.user, group):  
+    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group):  
         try:
             Announce.objects.get(id=announce_id).delete()
             return HttpResponseRedirect('/group/detail/%s' % group.id)
@@ -272,7 +275,7 @@ def delete_member(request, group_id, student_name):
     group = get_group(group_id)
     deleted_member = User.objects.get(username=student_name)
     
-    if has_group_ownership(request.user, group):  
+    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group):  
         try:
             group.member.remove(deleted_member)
             return HttpResponseRedirect('/group/detail/%s' % group.id)
@@ -285,46 +288,36 @@ def delete_member(request, group_id, student_name):
 @login_required
 def edit(request, group_id):
         group = get_group(group_id)
-
-        if has_group_ownership(request.user, group):
+        user_is_owner = has_group_ownership(request.user, group)
+        if has_group_ownership(request.user, group) or has_group_coownership(request.user, group):
             if request.method == 'GET':
                 group_dic = model_to_dict(group)
-                form = GroupFormEdit(initial = group_dic)
-                return render_index(request,'group/editGroup.html',{'form':form})
+                if user_is_owner:
+                    form = GroupFormEdit(initial = group_dic)
+                else:
+                    form = Coowner_GroupFormEdit(initial = group_dic)
+                return render_index(
+                    request,'group/editGroup.html', {
+                        'form':form,
+                        'group_id': group.id,
+                        'user_is_owner': user_is_owner,
+                    })
             if request.method == 'POST':
-                form = GroupFormEdit(request.POST, instance = group)
+                if user_is_owner:
+                    form = GroupFormEdit(request.POST, instance = group)
+                else:
+                    form = Coowner_GroupFormEdit(request.POST, instance = group)
                 if form.is_valid():
                     modified_group = form.save()
                     logger.info('Group: Modified group %s!' % modified_group.id)
                     return HttpResponseRedirect('/group/detail/%s' % modified_group.id)
                 else:
                     return render_index(
-                        request,
-                        'group/editGroup.html', {'form': form})
-            else: 
-                return None
-        else:
-            raise PermissionDenied
-
-@login_required
-def co_edit(request, group_id):
-        group = get_group(group_id)
-
-        if has_group_coownership(request.user, group):
-            if request.method == 'GET':
-                group_dic = model_to_dict(group)
-                form = Co_GroupFormEdit(initial = group_dic)
-                return render_index(request,'group/editGroup.html',{'form':form})
-            if request.method == 'POST':
-                form = Co_GroupFormEdit(request.POST, instance = group)
-                if form.is_valid():
-                    modified_group = form.save()
-                    logger.info('Group: Modified group %s!' % modified_group.id)
-                    return HttpResponseRedirect('/group/detail/%s' % modified_group.id)
-                else:
-                    return render_index(
-                        request,
-                        'group/editGroup.html', {'form': form})
+                        request,'group/editGroup.html', {
+                        'form':form,
+                        'group_id': group.id,
+                        'user_is_owner': user_is_owner,
+                    })
             else: 
                 return None
         else:
@@ -334,7 +327,7 @@ def co_edit(request, group_id):
 def add(request, group_id):
     group = get_group(group_id)
 
-    if has_group_ownership(request.user, group):
+    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group):
         if request.method == 'POST':
             form = AnnounceForm(request.POST)
             if form.is_valid():

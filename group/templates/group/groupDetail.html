@@ -11,19 +11,12 @@
        data-toggle="modal" style="float:left, margin-right:5px">
       Back
     </a>
-    {% if user_is_owner %}
+    {% if user_is_owner or user_is_coowner %}
       <a href="{% url 'group:edit' group_id %}">
         <button type="button" class="btn btn-sm btn-default">
           Edit
         </button>
-    </a>
-    {% endif %}
-    {% if user_is_coowner %}
-      <a href="{% url 'group:co_edit' group_id %}">
-        <button type="button" class="btn btn-sm btn-default">
-          Edit
-        </button>
-    </a>
+      </a>
     {% endif %}
     <br>
     <br>
@@ -76,10 +69,11 @@
         <div class="panel panel-success">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Running-Contest</a>
+              <a data-toggle="collapse" data-parent="#accordion" 
+                 href="#runningContestPanel">Running-Contest</a>
             </h4>
           </div>
-          <div id="collapseOne" class="panel-collapse collapse in">
+          <div id="runningContestPanel" class="panel-collapse collapse in">
             <div class="panel-body">
               <table class="table table-hover table-striped">
                 <thead>
@@ -113,10 +107,11 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Ended Contest</a>
+              <a data-toggle="collapse" data-parent="#accordion" 
+                 href="#endedContestPanel">Ended Contest</a>
             </h4>
           </div>
-          <div id="collapseTwo" class="panel-collapse collapse">
+          <div id="endedContestPanel" class="panel-collapse collapse">
             <div class="panel-body">
               <table class="table table-hover">
                 <thead>
@@ -198,7 +193,7 @@
                       <div class="col-lg-offset-8 col-lg-1">
                       {% if user_is_owner %}
                         <a href="{% url 'group:delete_announce' announce.id group_id %}">
-                        <button type="button" class="btn btn-danger btn-default">Delete
+                        <button type="button" class="btn btn-danger">Delete
                         </button>
                         </a>
                       {% endif %}
@@ -257,31 +252,27 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Level</th>
-            <th></th>
+            <div>
+              <th>Name</th>
+              <th></th>
+            </div>
           </tr>
         </thead>
         <tbody>
           {% for student in student_list %}
           <tr>
-            <td>{{ student.username }}</td>
-            {% if student.email == "" %}
-              <td>---</td>
-            {% else %}
-              <td>{{ student.email }}</td>
-            {% endif %}
-            <td>{{ student.user_level }}</td>
-            <td>
-              {% if user_is_owner %}
-                <a href="{% url 'group:delete_member' group_id student.username %}">
-                  <button type="button" class="btn btn-danger btn-xs" style="float:right">
-                    <span class="glyphicon glyphicon-remove"></span>
-                  </button>
-                </a>
-              {% endif %}
-            </td>
+            <div>
+              <td>{{ student.username }}</td>
+              <td>
+                {% if user_is_owner or user_is_coowner %}
+                  <a href="{% url 'group:delete_member' group_id student.username %}">
+                    <button type="button" class="btn btn-danger btn-xs" style="float:right">
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </a>
+                {% endif %}
+              </td>
+            </div>
           </tr>
           {% endfor %}
         </tbody>

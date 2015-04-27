@@ -3,9 +3,6 @@
 {% block title_name %}
 <title>Group List</title>
 {% endblock title_name %}
-{% block import_source %}
-<link href="{% static 'group/css/group.css' %}" rel="stylesheet">
-{% endblock import_source %} 
 {% block body_block %}
 
 <div class="container">
@@ -20,8 +17,8 @@
       <h2>Group List</h2>
     </div>
     <div class="btn-group" data-toggle="buttons-radio" style="float:left">
-      <button id="myGroupButton" type="button" class="btn btn-default">My Group</button>
-      <button id="allGroupButton" type="button" class="btn btn-default">All Group</button>
+      <button id="myGroupButton" type="button" class="btn btn-primary">My Group</button>
+      <button id="allGroupButton" type="button" class="btn btn-primary">All Group</button>
       <script>
         $(function(){
           $('#allGroupTable').show();
@@ -29,10 +26,12 @@
           $('#myGroupButton').click(function(){
             $('#allGroupTable').hide();
             $('#myGroupTable').show();
+            $('#allGroupButton').removeClass("active");
           });
           $('#allGroupButton').click(function(){
             $('#allGroupTable').show();
             $('#myGroupTable').hide();
+            $('#myGroupButton').removeClass("active");
           });
         })
       </script>

@@ -15,8 +15,7 @@
     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
-    '''
+    SOFTWARE.'''
 
 from django import forms
 from django.db.models import Q
@@ -34,7 +33,6 @@ class GroupForm(forms.ModelForm):
         model = Group
         fields = [
             'gname',
-            'owner',
             'coowner',
             'member',
             'description',
@@ -52,20 +50,19 @@ class GroupFormEdit(forms.ModelForm):
         fields = [
             'gname',
             'coowner',
-            'member',
+            #'member',
             'description',
             'trace_contest',
         ]
 
-class Co_GroupFormEdit(forms.ModelForm):
+class Coowner_GroupFormEdit(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(Co_GroupFormEdit, self).__init__(*args, **kwargs)
         # access object through self.instance...
-        self.fields['coowner'].queryset = User.objects.exclude(user_level=User.USER)
     class Meta:
         model = Group
         fields = [
-            'member',
+            #'member',
             'description',
             'trace_contest',
         ]

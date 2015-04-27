@@ -5,7 +5,6 @@
       <th>Name</th>
       <th>Owner</th>
       <th>Group Description</th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -17,15 +16,6 @@
       </td>
       <td>{{ group.owner }}</td>
       <td>{{ group.description|truncatechars:70 }}</td>
-      <td>
-      {% if user.has_judge_auth %}
-        <a href="{% url 'group:delete' group.id %}">
-            <button type="button" class="btn btn-danger btn-xs" style="float:right">
-              <span class="glyphicon glyphicon-remove"></span>
-            </button>
-          </a>
-      {% endif %}
-      </td>
     </tr>
     {% endfor %}
   </tbody>
