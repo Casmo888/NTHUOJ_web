@@ -22,7 +22,8 @@ $(document).ready(function() {
     add_attribute('id_member', 'class', 'searchable');
     add_attribute('id_trace_contest', 'class', 'searchable')
     enable_search();
-    //$('.help-block').hide()
+    $('input.search-input').quicksearch();
+    $('.help-block').hide()
 });
 
 function enable_search() {
