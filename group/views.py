@@ -242,7 +242,7 @@ def new(request):
             if form.is_valid():
                 new_group = form.save()
                 logger.info('Group: Create a new group %s!' % new_group.id)
-                return HttpResponseRedirect('/group/list')
+                return HttpResponseRedirect(reverse('group:list'))
             else:
                 return render_index(
                     request,
@@ -261,7 +261,7 @@ def delete(request, group_id):
         deleted_gid = group.id
         group.delete()
         logger.info('Group: Delete group %s!' % deleted_gid)
-        return HttpResponseRedirect('/group/list')
+        return HttpResponseRedirect(reverse('group:list'))
     else:
         raise PermissionDenied
 
@@ -273,7 +273,7 @@ def delete_announce(request, announce_id, group_id):
        request.user.has_admin_auth():  
         try:
             Announce.objects.get(id=announce_id).delete()
-            return HttpResponseRedirect('/group/detail/%s' % group.id)
+            return HttpResponseRedirect(reverse('group:detail', kwargs={'group_id': group.id}))
         except Announce.objects.get(id=announce_id).DoesNotExist:
             logger.info('Announce: already deleted %s!' % announce_id)
             raise Http404('Announce: already deleted %s!' % announce_id)
@@ -289,7 +289,7 @@ def delete_member(request, group_id, student_name):
        request.user.has_admin_auth():  
         try:
             group.member.remove(deleted_member)
-            return HttpResponseRedirect('/group/detail/%s' % group.id)
+            return HttpResponseRedirect(reverse('group:detail', kwargs={'group_id': group.id}))
         except:
             logger.info('Member: %s already deleted from group!' % student_name)
             raise Http404('Member: %s already deleted from group!' % student_name)
@@ -318,7 +318,7 @@ def edit(request, group_id):
                 if form.is_valid():
                     modified_group = form.save()
                     logger.info('Group: Modified group %s!' % modified_group.id)
-                    return HttpResponseRedirect('/group/detail/%s' % modified_group.id)
+                    return HttpResponseRedirect(reverse('group:detail', kwargs={'group_id': modified_group.id}))
                 else:
                     return render_index(
                         request,'group/editGroup.html', {
@@ -343,6 +343,6 @@ def add(request, group_id):
                 new_announce = form.save()
                 group.announce.add(new_announce)
                 logger.info('Announce: User %s add Announce %s!' % (request.user.username, new_announce.id))
-                return HttpResponseRedirect('/group/detail/%s' % group.id)
+                return HttpResponseRedirect(reverse('group:detail', kwargs={'group_id': group.id}))
     else:
         raise PermissionDenied
