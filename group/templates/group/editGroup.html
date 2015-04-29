@@ -15,6 +15,8 @@
 <br>
 <br>
 <div class="container">
+  <h4>edit:</h4>
+  <h2>#{{ group_id }} - {{ group_name }}</h2>
   <div class="well">
     <a onclick="history.back()" type="reset" class="btn btn-sm btn-default">
       Cancel
@@ -43,13 +45,7 @@
             {{ field.as_hidden }}
           {% endif %}
         {% else %}
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <div class="fieldWrapper form-group">
-                {{ field|bootstrap }}
-              </div>
-            </div>
-          </div>
+          {{ field|bootstrap }}
         {% endif %}
       {% endfor %}
       <br>
@@ -58,7 +54,5 @@
     </form>
   </div>
 </div>
-<br>
-<br>
 <br>
 {% endblock body_block %}

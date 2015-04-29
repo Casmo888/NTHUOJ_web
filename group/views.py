@@ -310,6 +310,7 @@ def edit(request, group_id):
                         'form':form,
                         'group_id': group.id,
                         'user_is_owner': user_is_owner,
+                        'group_name': group.gname,
                         'user_has_admin_auth': request.user.has_admin_auth(),
                     })
             if request.method == 'POST':
@@ -322,7 +323,6 @@ def edit(request, group_id):
                     return render_index(
                         request,'group/editGroup.html', {
                         'form':form,
-                        'group_id': group.id,
                         'user_is_owner': user_is_owner,
                         'user_has_admin_auth': request.user.has_admin_auth(),
                     })
