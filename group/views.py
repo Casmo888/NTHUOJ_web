@@ -305,9 +305,9 @@ def edit(request, group_id):
             if request.method == 'GET':
                 group_dic = model_to_dict(group)
                 if user_is_owner or request.user.has_admin_auth():
-                    form = GroupFormEdit(initial = group_dic)
+                    form = GroupFormEdit(initial=group_dic)
                 else:
-                    form = Coowner_GroupFormEdit(initial = group_dic)
+                    form = Coowner_GroupFormEdit(initial=group_dic)
                 return render_index(
                     request,'group/editGroup.html', {
                         'form':form,
@@ -317,9 +317,9 @@ def edit(request, group_id):
                     })
             if request.method == 'POST':
                 if user_is_owner or request.user.has_admin_auth():
-                    form = GroupFormEdit(request.POST, instance = group)
+                    form = GroupFormEdit(request.POST, instance=group)
                 else:
-                    form = Coowner_GroupFormEdit(request.POST, instance = group)
+                    form = Coowner_GroupFormEdit(request.POST, instance=group)
                 if form.is_valid():
                     modified_group = form.save()
                     logger.info('Group: Modified group %s!' % modified_group.id)
