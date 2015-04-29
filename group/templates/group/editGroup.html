@@ -36,13 +36,17 @@
     <form action="." method="POST">
       {% csrf_token %}
       {% for field in form %}
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div class="fieldWrapper form-group">
-              {{ field|bootstrap }}
+        {% if field.label_tag == form.owner.label_tag %}
+          {{ field.as_hidden }}
+        {% else %}
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="fieldWrapper form-group">
+                {{ field|bootstrap }}
+              </div>
             </div>
           </div>
-        </div>
+        {% endif %}
       {% endfor %}
       <br>
       <input class="btn btn-sm btn-primary" type="submit" style="float:right" value="Comfirm">
