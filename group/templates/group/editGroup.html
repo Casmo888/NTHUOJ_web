@@ -38,6 +38,10 @@
       {% for field in form %}
         {% if field.label_tag == form.owner.label_tag %}
           {{ field.as_hidden }}
+        {% elif field.label_tag == form.coowner.label_tag%}
+          {% if not user_is_owner or user_has_admin_auth %}
+            {{ field.as_hidden }}
+          {% endif %}
         {% else %}
           <div class="panel panel-default">
             <div class="panel-body">

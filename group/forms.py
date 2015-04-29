@@ -52,17 +52,6 @@ class GroupFormEdit(forms.ModelForm):
             'trace_contest',
         ]
 
-class Coowner_GroupFormEdit(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(Coowner_GroupFormEdit, self).__init__(*args, **kwargs)
-        # access object through self.instance...
-    class Meta:
-        model = Group
-        fields = [
-            'description',
-            'trace_contest',
-        ]
-
 class AnnounceForm(forms.ModelForm):
     class Meta:
         model = Announce

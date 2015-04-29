@@ -29,7 +29,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, render
 from django.utils import timezone
 from django.forms.models import model_to_dict
-from group.forms import GroupForm, GroupFormEdit, Coowner_GroupFormEdit, AnnounceForm
+from group.forms import GroupForm, GroupFormEdit, AnnounceForm
 from group.models import Group, Announce
 from utils.user_info import has_group_ownership, has_group_coownership
 from utils.log_info import get_logger
@@ -304,10 +304,7 @@ def edit(request, group_id):
            request.user.has_admin_auth():
             if request.method == 'GET':
                 group_dic = model_to_dict(group)
-                if user_is_owner or request.user.has_admin_auth():
-                    form = GroupFormEdit(initial=group_dic)
-                else:
-                    form = Coowner_GroupFormEdit(initial=group_dic)
+                form = GroupFormEdit(initial=group_dic)
                 return render_index(
                     request,'group/editGroup.html', {
                         'form':form,
@@ -316,10 +313,7 @@ def edit(request, group_id):
                         'user_has_admin_auth': request.user.has_admin_auth(),
                     })
             if request.method == 'POST':
-                if user_is_owner or request.user.has_admin_auth():
-                    form = GroupFormEdit(request.POST, instance=group)
-                else:
-                    form = Coowner_GroupFormEdit(request.POST, instance=group)
+                form = GroupFormEdit(request.POST, instance=group)
                 if form.is_valid():
                     modified_group = form.save()
                     logger.info('Group: Modified group %s!' % modified_group.id)
