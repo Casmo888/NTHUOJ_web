@@ -93,8 +93,8 @@
                           {{ running_contest.cname }}
                         </a>
                       </td>
-                      <td>{{ running_contest.start_time }}</td>
-                      <td>{{ running_contest.end_time }}</td>
+                      <td>{{ running_contest.start_time|date:"Y/m/d H:i:s" }}</td>
+                      <td>{{ running_contest.end_time|date:"Y/m/d H:i:s" }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -125,14 +125,14 @@
                 <tbody>
                   {% for ended_contest in ended_contest_list %}
                     <tr>
-                      <td>{{ended_contest.id}}</td>
+                      <td>{{ ended_contest.id }}</td>
                       <td>
                         <a href="{% url 'contest:contest' ended_contest.id %}">
                           {{ ended_contest.cname }}
                         </a>
                       </td>
-                      <td>{{ ended_contest.start_time }}</td>
-                      <td>{{ ended_contest.end_time }}</td>
+                      <td>{{ ended_contest.start_time|date:"Y/m/d H:i:s" }}</td>
+                      <td>{{ ended_contest.end_time|date:"Y/m/d H:i:s" }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>

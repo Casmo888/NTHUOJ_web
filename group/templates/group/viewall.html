@@ -39,16 +39,16 @@
               {{ archive.cname }}
             </a>
           </td>
-          <td>{{ archive.start_time }}</td>
-          <td>{{ archive.end_time }}</td>
+          <td>{{ archive.start_time|date:"Y/m/d H:i:s" }}</td>
+          <td>{{ archive.end_time|date:"Y/m/d H:i:s" }}</td>
         {% elif list_type == 'endContest'%}
           <td>
             <a href="{% url 'contest:contest' archive.id %}">
               {{ archive.cname }}
             </a>
           </td>
-          <td>{{ archive.start_time }}</td>
-          <td>{{ archive.end_time }}</td>
+          <td>{{ archive.start_time|date:"Y/m/d H:i:s" }}</td>
+          <td>{{ archive.end_time|date:"Y/m/d H:i:s" }}</td>
         {% elif list_type == "announce" %}
         <td>{{ archive.title }}</td>
         <td>{{ archive.content }}</td>
