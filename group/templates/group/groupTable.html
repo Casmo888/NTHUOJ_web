@@ -22,16 +22,6 @@
 </table>
 <div class="container-fluid">
   <nav>
-    <ul class="pager">
-      {% if group_list.has_previous %}
-      <li><a href="?page={{ group_list.previous_page_number }}">← Previous</a></li>
-      {% endif %}
-      <span class="current">
-        Page {{ group_list.number }} of {{ group_list.paginator.num_pages }}.
-      </span>
-      {% if group_list.has_next %}
-      <li><a href="?page={{ group_list.next_page_number }}">Next →</a></li>
-      {% endif %}
-    </ul>
+    {% include "utils/pager.html" with objects=group_list %}
   </nav>
 </div>

@@ -82,17 +82,7 @@
     </tbody>
   </table>
   <nav>
-    <ul class="pager">
-      {% if data_list.has_previous %}
-      <li><a href="?page={{ data_list.previous_page_number }}">← Previous</a></li>
-      {% endif %}
-      <span class="current">
-        Page {{ data_list.number }} of {{ data_list.paginator.num_pages }}.
-      </span>
-      {% if data_list.has_next %}
-      <li><a href="?page={{ data_list.next_page_number }}">Next →</a></li>
-      {% endif %}
-    </ul>
+    {% include "utils/pager.html" with objects=data_list %}
   </nav>
 </div>
 {% endblock body_block %}

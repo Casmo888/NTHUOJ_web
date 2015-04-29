@@ -281,25 +281,9 @@
     </div>
     <hr>
     <div class="container-fluid">
-      <ul class="pager">
-      <span class="step-links">
-        {% if student_list.has_previous %}
-          <li class="previous">
-            <a href="?page={{ student_list.previous_page_number }}">← Previous</a>
-          </li>
-         {% endif %}
-
-        <span class="current">
-          Page {{ student_list.number }} of {{ student_list.paginator.num_pages }}.
-        </span>
-
-        {% if student_list.has_next %}
-          <li class="next">
-            <a href="?page={{ student_list.next_page_number }}">Next →</a>
-          </li>
-        {% endif %}
-      </span>
-      </ul>
+      <nav>
+        {% include "utils/pager.html" with objects=student_list %}
+      </nav>
     </div>
   </div>
   <!--Modal Section-->
