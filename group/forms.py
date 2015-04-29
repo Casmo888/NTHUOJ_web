@@ -27,14 +27,13 @@ class GroupForm(forms.ModelForm):
         super(GroupForm, self).__init__(*args, **kwargs)
         # access object through self.instance...
         self.fields['coowner'].queryset = User.objects.exclude(user_level=User.USER)
-        self.fields['owner'].queryset = User.objects.exclude(user_level=User.USER)
 
     class Meta:
         model = Group
         fields = [
             'gname',
             'coowner',
-            'member',
+            #'member',
             'description',
             'trace_contest',
         ]
@@ -57,7 +56,7 @@ class GroupFormEdit(forms.ModelForm):
 
 class Coowner_GroupFormEdit(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(Co_GroupFormEdit, self).__init__(*args, **kwargs)
+        super(Coowner_GroupFormEdit, self).__init__(*args, **kwargs)
         # access object through self.instance...
     class Meta:
         model = Group

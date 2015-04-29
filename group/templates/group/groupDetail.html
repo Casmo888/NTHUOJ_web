@@ -11,7 +11,7 @@
        data-toggle="modal" style="float:left, margin-right:5px">
       Back
     </a>
-    {% if user_is_owner or user_is_coowner %}
+    {% if user_is_owner or user_is_coowner or user_has_admin_auth %}
       <a href="{% url 'group:edit' group_id %}">
         <button type="button" class="btn btn-sm btn-default">
           Edit
@@ -155,7 +155,7 @@
             <th>Title</th>
             <th>Content</th>
             <th>
-              {% if user_is_owner %}
+              {% if user_is_owner or user_is_coowner or user_has_admin_auth %}
                 <button type="button" class="btn btn-primary btn-sm" 
                         data-toggle="modal" style="float:right" 
                         data-target="#addannounce">
@@ -191,7 +191,7 @@
                     </div>
                     <div class="modal-footer">
                       <div class="col-lg-offset-8 col-lg-1">
-                      {% if user_is_owner %}
+                      {% if user_is_owner or user_is_coowner or user_has_admin_auth %}
                         <a href="{% url 'group:delete_announce' announce.id group_id %}">
                         <button type="button" class="btn btn-danger">Delete
                         </button>
@@ -264,7 +264,7 @@
             <div>
               <td>{{ student.username }}</td>
               <td>
-                {% if user_is_owner or user_is_coowner %}
+                {% if user_is_owner or user_is_coowner or user_has_admin_auth %}
                   <a href="{% url 'group:delete_member' group_id student.username %}">
                     <button type="button" class="btn btn-danger btn-xs" style="float:right">
                       <span class="glyphicon glyphicon-remove"></span>

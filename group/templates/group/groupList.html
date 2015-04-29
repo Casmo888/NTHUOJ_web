@@ -5,18 +5,19 @@
 {% endblock title_name %}
 {% block body_block %}
 
+<br>
 <div class="container">
   <div class="col-lg-offset-1 col-lg-10">
     <div class="well">
-      {% if user.has_judge_auth %}
-      <div>
-        <a class="btn btn-sm btn-default" style="float:right"
-           href="{% url 'group:new' %}">Create</a>
-      </div>
-      {% endif %}
       <h2>Group List</h2>
     </div>
-    <div class="btn-group" data-toggle="buttons-radio" style="float:left">
+    {% if user.has_judge_auth %}
+      <div>
+        <a class="btn btn-sm btn-default" style="float:left"
+           href="{% url 'group:new' %}">Create</a>
+      </div>
+    {% endif %}
+    <div class="btn-group" data-toggle="buttons-radio" style="float:right">
       <button id="myGroupButton" type="button" class="btn btn-primary">My Group</button>
       <button id="allGroupButton" type="button" class="btn btn-primary">All Group</button>
       <script>

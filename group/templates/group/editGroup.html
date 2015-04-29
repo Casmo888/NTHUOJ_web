@@ -19,7 +19,7 @@
     <a onclick="history.back()" type="reset" class="btn btn-sm btn-default">
       Cancel
     </a>
-    {% if user_is_owner %}
+    {% if user_is_owner or user_has_admin_auth %}
     <a href="{% url 'group:delete' group_id %}">
       <button type="button" class="btn btn-danger btn-xs" style="float:right">
         Delete This Group
@@ -31,7 +31,6 @@
     <div class="alert alert-dismissable alert-warning">
       <button type="button" class="close" data-dismiss="alert">×</button>
       <h4>Hey! You Are Now Setting for Group...</h4>
-      <p style="color:white">hint: HOLD shift to select more than two objects</p>
       <p style="color:white">hint: Any change you made will be saved to group</p>
     </div>
     <form action="." method="POST">

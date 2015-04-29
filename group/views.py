@@ -145,9 +145,17 @@ def detail(request, group_id):
     student_list = group.member.order_by('user_level')
     coowner_list = group.coowner.all()
     owner = group.owner
-    user_is_owner = has_group_ownership(request.user, group)
-    user_is_coowner = has_group_coownership(request.user, group)
     form = AnnounceForm()
+
+    if not request.user.is_anonymous():
+        user_is_owner = has_group_ownership(request.user, group)
+        user_is_coowner = has_group_coownership(request.user, group)
+        user_has_admin_auth = request.user.has_admin_auth()
+    else: 
+        user_is_owner = False
+        user_is_coowner = False
+        user_has_admin_auth = False
+
     running_contest_list = []
     ended_contest_list = []
     now = timezone.now()
@@ -182,6 +190,7 @@ def detail(request, group_id):
             'group_id': group.id,
             'user_is_owner': user_is_owner,
             'user_is_coowner': user_is_coowner,
+            'user_has_admin_auth': user_has_admin_auth,
             'form': form,
         })
 
@@ -247,7 +256,7 @@ def new(request):
 def delete(request, group_id):
     group = get_group(group_id)
 
-    if has_group_ownership(request.user, group):
+    if has_group_ownership(request.user, group) or request.user.has_admin_auth():
         group = get_group(group_id)
         deleted_gid = group.id
         group.delete()
@@ -260,7 +269,8 @@ def delete(request, group_id):
 def delete_announce(request, announce_id, group_id):
     group = get_group(group_id)
 
-    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group):  
+    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group) or \
+       request.user.has_admin_auth():  
         try:
             Announce.objects.get(id=announce_id).delete()
             return HttpResponseRedirect('/group/detail/%s' % group.id)
@@ -275,7 +285,8 @@ def delete_member(request, group_id, student_name):
     group = get_group(group_id)
     deleted_member = User.objects.get(username=student_name)
     
-    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group):  
+    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group) or \
+       request.user.has_admin_auth():  
         try:
             group.member.remove(deleted_member)
             return HttpResponseRedirect('/group/detail/%s' % group.id)
@@ -289,10 +300,11 @@ def delete_member(request, group_id, student_name):
 def edit(request, group_id):
         group = get_group(group_id)
         user_is_owner = has_group_ownership(request.user, group)
-        if has_group_ownership(request.user, group) or has_group_coownership(request.user, group):
+        if has_group_ownership(request.user, group) or has_group_coownership(request.user, group) or \
+           request.user.has_admin_auth():
             if request.method == 'GET':
                 group_dic = model_to_dict(group)
-                if user_is_owner:
+                if user_is_owner or request.user.has_admin_auth():
                     form = GroupFormEdit(initial = group_dic)
                 else:
                     form = Coowner_GroupFormEdit(initial = group_dic)
@@ -301,9 +313,10 @@ def edit(request, group_id):
                         'form':form,
                         'group_id': group.id,
                         'user_is_owner': user_is_owner,
+                        'user_has_admin_auth': request.user.has_admin_auth(),
                     })
             if request.method == 'POST':
-                if user_is_owner:
+                if user_is_owner or request.user.has_admin_auth():
                     form = GroupFormEdit(request.POST, instance = group)
                 else:
                     form = Coowner_GroupFormEdit(request.POST, instance = group)
@@ -317,6 +330,7 @@ def edit(request, group_id):
                         'form':form,
                         'group_id': group.id,
                         'user_is_owner': user_is_owner,
+                        'user_has_admin_auth': request.user.has_admin_auth(),
                     })
             else: 
                 return None
@@ -327,7 +341,8 @@ def edit(request, group_id):
 def add(request, group_id):
     group = get_group(group_id)
 
-    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group):
+    if has_group_ownership(request.user, group) or has_group_coownership(request.user, group) or \
+       request.user.has_admin_auth():
         if request.method == 'POST':
             form = AnnounceForm(request.POST)
             if form.is_valid():
@@ -337,4 +352,3 @@ def add(request, group_id):
                 return HttpResponseRedirect('/group/detail/%s' % group.id)
     else:
         raise PermissionDenied
-
