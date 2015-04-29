@@ -22,11 +22,37 @@
       Cancel
     </a>
     {% if user_is_owner or user_has_admin_auth %}
-    <a href="{% url 'group:delete' group_id %}">
+    <a href="" data-toggle="modal" data-target="#deleteGroupComfirm">
       <button type="button" class="btn btn-danger btn-xs" style="float:right">
         Delete This Group
       </button>
     </a>
+    <!--Modal for Delete_Group_Comfirm-->
+    <div class="modal fade" id="deleteGroupComfirm" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h4>Are you sure to delete this group?</h4>
+            <h4>This procedure is irrecoverable</h4>
+          </div>
+          <div class="modal-footer">
+            <div class="col-lg-offset-8 col-lg-1">
+              <button type="button" class="btn btn-default" data-dismiss="modal">
+                No.
+              </button>
+            </div>
+            <div class="col-lg-offset-1 col-lg-0">
+              <a href="{% url 'group:delete' group_id %}">
+                <button type="button" class="btn btn-danger">
+                  I'm sure.
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Modal End-->
     {% endif %}
     <br>
     <br>
