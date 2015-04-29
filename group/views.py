@@ -51,7 +51,7 @@ def get_group(group_id):
 def get_running_contest(request, group_id):
 
     group = get_group(group_id)
-    all_contest = group.trace_contest.order_by('start_time')
+    all_contest = group.trace_contest.order_by('-start_time')
     all_running_contest_list = []
     now = timezone.now()
 
@@ -81,7 +81,7 @@ def get_running_contest(request, group_id):
 def get_ended_contest(request, group_id):
 
     group = get_group(group_id)
-    all_contest = group.trace_contest.order_by('start_time')
+    all_contest = group.trace_contest.order_by('-start_time')
     all_ended_contest_list = []
     now = timezone.now()
 
@@ -141,7 +141,7 @@ def detail(request, group_id):
 
     group = get_group(group_id)
     show_number = 5; #number for brief list to show in group detail page.
-    all_contest = group.trace_contest.order_by('start_time')
+    all_contest = group.trace_contest.order_by('-start_time')
     annowence_list = group.announce.all()
     student_list = group.member.order_by('user_level')
     coowner_list = group.coowner.all()
