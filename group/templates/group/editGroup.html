@@ -15,8 +15,12 @@
 <br>
 <br>
 <div class="col-lg-offset-1 col-lg-10">
-  <h4>edit:</h4>
-  <h2>#{{ group_id }} - {{ group_name }}</h2>
+  {% if not group_id %}
+    <h4>new:</h4>
+  {% else %}
+    <h4>edit:</h4>
+    <h2>#{{ group_id }} - {{ group_name }}</h2>
+  {% endif %}
   <div class="well">
     <a onclick="history.go(-1)" type="reset" class="btn btn-sm btn-default">
       Cancel
@@ -58,7 +62,11 @@
     <br>
     <div class="alert alert-dismissable alert-warning">
       <button type="button" class="close" data-dismiss="alert">×</button>
-      <h4>Hey! You Are Now Setting for Group #{{ group_id }}...</h4>
+      {% if not group_id %}
+        <h4>Hey! You Are Now Setting for New Group ...</h4>
+      {% else %}
+        <h4>Hey! You Are Now Setting for Group #{{ group_id }}...</h4>
+      {% endif %}
       <p style="color:white">hint: Any change you made will be saved to group</p>
     </div>
     <form action="." method="POST">
