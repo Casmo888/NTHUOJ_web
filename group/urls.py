@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^edit/(?P<group_id>\d+)/$', views.edit, name='edit'),
     url(r'^add/(?P<group_id>\d+)/$', views.add, name='add'),
     url(r'^delete_announce/(?P<announce_id>\d+)/(?P<group_id>\d+)/$', views.delete_announce, name='delete_announce'),
+    url(r'^edit_announce/(?P<announce_id>\d+)/(?P<group_id>\d+)/(?P<redirect_id>\d+)/$', views.edit_announce, name='edit_announce'),
     url(r'^delete_member/(?P<group_id>\d+)/(?P<student_name>\w+)/$', views.delete_member, name='delete_member'),
 )

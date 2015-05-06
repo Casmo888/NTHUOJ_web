@@ -49,32 +49,55 @@
           </td>
           <td>{{ archive.start_time|date:"Y/m/d H:i:s" }}</td>
           <td>{{ archive.end_time|date:"Y/m/d H:i:s" }}</td>
-        {% elif list_type == "announce" %}
+        {% else %}
         <td>{{ archive.title }}</td>
         <td>{{ archive.content }}</td>
         <td>
-          <a href="" class="btn btn-sm btn-default" data-toggle="modal"
-             data-target="#annowenceContentModal{{archive.id}}" style="float:right">
-            Detail</a>
-          <!--1. Modal for Edit Annowence button-->
-          <div class="modal fade" id="annowenceContentModal{{archive.id}}"
-               role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="btn-default" class="close" data-dismiss="modal"
-                          aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Edit Annowence</h4>
-                </div>
-                <div class="modal-body">
-                  <div class="input-group">
-                    <span class="input-group-addon">Title</span>
-                    <input type="text" class="form-control" value="{{ archive.name }}">
+          {% if not user_is_owner or user_is_coowner or user_has_admin_auth %}
+            <td>
+              <a href="" class="btn btn-sm btn-default" 
+                 data-toggle="modal"
+                 data-target="#announceContentModal"
+                 style="float:right">Detail</a>
+              <!--Modal Section-->
+              <div class="modal fade" id="announceContentModal"
+                 role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="btn-default" class="close" data-dismiss="modal"
+                              aria-hidden="true">&times;</button>
+                      <h3 class="modal-title" id="modal-title" title="{{ archive.title}}">
+                        {{ archive.title|truncatechars:25 }}
+                      </h3>
+                    </div> 
+                    <div class="modal-body">
+                      <p id="modal-content" style="word-wrap:break-word">
+                        {{ archive.content }}
+                      </p>
+                    </div>
+                    <div class="modal-footer">
+                      <div class="col-lg-offset-10 col-lg-1">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                          Close
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+              <!--Modal Section End-->
+            </td>
+            {% else %}
+            <td>
+              <a href="{% url 'group:edit_announce' archive.id group_id redirect_id %}">
+                <button type="button" class="btn btn-warning btn-sm" 
+                        data-toggle="modal" style="float:right">
+                  Edit
+                </button>
+              </a>
+            </td>
+          {% endif %}
         </td>
         {% endif %}
       </tr>
@@ -85,4 +108,28 @@
     {% include "utils/pager.html" with objects=data_list %}
   </nav>
 </div>
+<!--Modal Section-->
+<div class="modal fade" id="announceContentModal"
+   role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="btn-default" class="close" data-dismiss="modal"
+                aria-hidden="true">&times;</button>
+        <h3 class="modal-title" id="modal-title"></h3>
+      </div> 
+      <div class="modal-body">
+        <p id="modal-content" style="word-wrap:break-word"></p>
+      </div>
+      <div class="modal-footer">
+        <div class="col-lg-offset-10 col-lg-1">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal Section End-->
 {% endblock body_block %}

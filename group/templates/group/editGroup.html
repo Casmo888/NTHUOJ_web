@@ -18,7 +18,7 @@
   <h4>edit:</h4>
   <h2>#{{ group_id }} - {{ group_name }}</h2>
   <div class="well">
-    <a onclick="history.back()" type="reset" class="btn btn-sm btn-default">
+    <a onclick="history.go(-1)" type="reset" class="btn btn-sm btn-default">
       Cancel
     </a>
     {% if user_is_owner or user_has_admin_auth %}

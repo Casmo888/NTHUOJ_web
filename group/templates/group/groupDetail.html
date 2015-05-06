@@ -1,4 +1,5 @@
 {% extends "index/base.html" %}
+{% load bootstrap %}
 {% load static %}
 {% block title_name %}
 <title>{{ group_name }}</title>
@@ -162,7 +163,7 @@
                         data-target="#addannounce">
                   Add announce
                 </button>
-                {% include "group/addAnnounce.html" %}
+                {% include "group/addAnnounce.html" with group_id=group_id %}
               {% endif %}
             </th>
           </tr>
@@ -170,44 +171,53 @@
         <tbody>
           {% for announce in announce_list %}
           <tr>
-            <td>{{ announce.title|truncatechars:25 }}</td>
-            <td>{{ announce.content|truncatechars:70 }}</td>
+            <td id="title{{announce.id}}">{{ announce.title|truncatechars:25 }}</td>
+            <td id="content{{announce.id}}">{{ announce.content|truncatechars:70 }}</td>
+            {% if not user_is_owner or user_is_coowner or user_has_admin_auth %}
             <td>
-              <a href="" class="btn btn-sm btn-default" data-toggle="modal"
-                 data-target="#annowenceContentModal{{annowence.id}}"
+              <a href="" class="btn btn-sm btn-default" 
+                 data-toggle="modal"
+                 data-target="#announceContentModal"
                  style="float:right">Detail</a>
-              <!--1. Modal for Annowence Detail button-->
-              <div class="modal fade" id="annowenceContentModal{{annowence.id}}"
-                   role="dialog" aria-hidden="true">
+              <!--Modal Section-->
+              <div class="modal fade" id="announceContentModal"
+                 role="dialog" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="btn-default" class="close" data-dismiss="modal"
                               aria-hidden="true">&times;</button>
-                      <h5 class="modal-title" title="{{announce.title}}">
-                        {{announce.title|truncatechars:42}}
-                      </h5> 
+                      <h3 class="modal-title" id="modal-title" title="{{ announce.title}}">
+                        {{ announce.title|truncatechars:25 }}
+                      </h3>
+                    </div> 
                     <div class="modal-body">
-                      <p style="word-wrap:break-word">{{ announce.content }}</p>
+                      <p id="modal-content" style="word-wrap:break-word">
+                        {{ announce.content }}
+                      </p>
                     </div>
                     <div class="modal-footer">
-                      <div class="col-lg-offset-8 col-lg-1">
-                      {% if user_is_owner or user_is_coowner or user_has_admin_auth %}
-                        <a href="{% url 'group:delete_announce' announce.id group_id %}">
-                        <button type="button" class="btn btn-danger">Delete
+                      <div class="col-lg-offset-10 col-lg-1">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                          Close
                         </button>
-                        </a>
-                      {% endif %}
-                      </div>
-                      <div class="col-lg-offset-1 col-lg-1">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">
-                        Close</button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <!--Modal Section End-->
             </td>
+            {% else %}
+            <td>
+              <a href="{% url 'group:edit_announce' announce.id group_id redirect_id %}">
+                <button type="button" class="btn btn-warning btn-sm" 
+                        data-toggle="modal" style="float:right">
+                  Edit
+                </button>
+              </a>
+            </td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>
@@ -221,35 +231,6 @@
       <div style="margin-bottom:15px">
         <h4 style="text-decoration:underline;color:gray">Members</h4>
       </div>
-      <!--
-      <div style="width:20%;float:left" class="input-group">
-        <span class="input-group-addon">
-          <span class="glyphicon glyphicon-search"></span>
-        </span>
-        <input id="search" class="form-control">
-      </div>
-      <form action="#" class="navbar-search pull-left" method="get">
-        <input type="text" name="q" class="search-query span10" value=""
-               placeholder="Search..."style="float:left">
-      </form>
-      <div class="btn-group" style="float:right">
-        <a href="#" class="btn btn-default btn-sm">+</a>
-        <a href="#" class="btn btn-defalut dropdown-toggle btn-sm" data-toggle="dropdown">
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Add single student</a>
-          </li>
-          <li><a href="#">Add with list</a>
-          </li>
-          <li class="divider"></li>
-          <li><a href="#">Something else</a>
-          </li>
-        </ul>
-        <a href="" class="btn btn-sm btn-default" data-toggle="modal"
-           data-target="#studentDataDownloadModal" style="float:right">Download</a>
-      </div>
-      -->
       <table class="table table-hover">
         <thead>
           <tr>
@@ -286,29 +267,5 @@
       </nav>
     </div>
   </div>
-  <!--Modal Section-->
-  <!--1. Modal for Downloading student data-->
-  <!--
-  <div class="modal fade" id="studentDataDownloadModal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="btn-default" class="close" data-dismiss="modal"
-                  aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Download data</h4>
-        </div>
-        <div class="modal-body">
-          <p>Not avalible now</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">
-            Cancel</button>
-          <button type="button" class="btn btn-primary">Confirm</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  -->
-  <!--Modal Section End-->
 </div>
 {% endblock body_block %}

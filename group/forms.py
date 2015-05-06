@@ -63,3 +63,4 @@ class AnnounceForm(forms.ModelForm):
             'title': forms.TextInput(),
             'content': forms.Textarea(),
         }
+
