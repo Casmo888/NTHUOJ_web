@@ -12,7 +12,7 @@
        data-toggle="modal" style="float:left, margin-right:5px">
       Back
     </a>
-    {% if user_is_owner or user_is_coowner or user_has_admin_auth %}
+    {% if not user_has_no_auth %}
       <a href="{% url 'group:edit' group_id %}">
         <button type="button" class="btn btn-sm btn-default">
           Edit
@@ -157,7 +157,7 @@
             <th>Title</th>
             <th>Content</th>
             <th>
-              {% if user_is_owner or user_is_coowner or user_has_admin_auth %}
+              {% if not user_has_no_auth %}
                 <button type="button" class="btn btn-primary btn-sm" 
                         data-toggle="modal" style="float:right" 
                         data-target="#addannounce">
@@ -173,7 +173,7 @@
           <tr>
             <td id="title{{announce.id}}">{{ announce.title|truncatechars:25 }}</td>
             <td id="content{{announce.id}}">{{ announce.content|truncatechars:70 }}</td>
-            {% if not user_is_owner or user_is_coowner or user_has_admin_auth %}
+            {% if user_has_no_auth %}
             <td>
               <a href="" class="btn btn-sm btn-default" 
                  data-toggle="modal"
@@ -246,7 +246,7 @@
             <div>
               <td>{{ student.username }}</td>
               <td>
-                {% if user_is_owner or user_is_coowner or user_has_admin_auth %}
+                {% if not user_has_no_auth %}
                   <a href="{% url 'group:delete_member' group_id student.username %}">
                     <button type="button" class="btn btn-danger btn-xs" style="float:right">
                       <span class="glyphicon glyphicon-remove"></span>

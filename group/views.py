@@ -128,6 +128,11 @@ def get_all_announce(request, group_id):
         user_is_owner = False
         user_is_coowner = False
         user_has_admin_auth = False
+    if not user_is_owner and not user_is_owner and not user_has_admin_auth:
+        user_has_no_auth = True
+    else :
+        user_has_no_auth = False
+
     form = AnnounceForm()
     all_announce_list = group.announce.all()
 
@@ -148,9 +153,7 @@ def get_all_announce(request, group_id):
             'data_list': all_announce_list,
             'title': 'announce',
             'list_type': 'announce',
-            'user_is_owner': user_is_owner,
-            'user_is_coowner': user_is_coowner,
-            'user_has_admin_auth': user_has_admin_auth,
+            'user_has_no_auth': user_has_no_auth,
             'group_id': group.id,
             'redirect_id': redirect_id,
         })
@@ -176,6 +179,10 @@ def detail(request, group_id):
         user_is_owner = False
         user_is_coowner = False
         user_has_admin_auth = False
+    if not user_is_owner and not user_is_owner and not user_has_admin_auth:
+        user_has_no_auth = True
+    else :
+        user_has_no_auth = False
 
     running_contest_list = []
     ended_contest_list = []
@@ -209,9 +216,7 @@ def detail(request, group_id):
             'group_name': group.gname, 
             'group_description': group.description,
             'group_id': group.id,
-            'user_is_owner': user_is_owner,
-            'user_is_coowner': user_is_coowner,
-            'user_has_admin_auth': user_has_admin_auth,
+            'user_has_no_auth': user_has_no_auth,
             'form': form,
             'redirect_id' : redirect_id,
         })

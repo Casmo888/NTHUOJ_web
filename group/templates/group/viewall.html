@@ -53,7 +53,7 @@
         <td>{{ archive.title }}</td>
         <td>{{ archive.content }}</td>
         <td>
-          {% if not user_is_owner or user_is_coowner or user_has_admin_auth %}
+          {% if user_has_no_auth %}
             <td>
               <a href="" class="btn btn-sm btn-default" 
                  data-toggle="modal"
