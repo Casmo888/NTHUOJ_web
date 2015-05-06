@@ -292,6 +292,8 @@ def delete(request, group_id):
 def edit(request, group_id):
     group = get_group(group_id)
     user_is_owner = has_group_ownership(request.user, group)
+    user_has_admin_auth = request.user.has_admin_auth()
+    user_is_coowner = not(user_is_owner or user_has_admin_auth)
     if has_group_ownership(request.user, group) or has_group_coownership(request.user, group) or \
        request.user.has_admin_auth():
         if request.method == 'GET':
@@ -303,7 +305,8 @@ def edit(request, group_id):
                     'group_id': group.id,
                     'user_is_owner': user_is_owner,
                     'group_name': group.gname,
-                    'user_has_admin_auth': request.user.has_admin_auth(),
+                    'user_has_admin_auth': user_has_admin_auth,
+                    'user_is_coowner': user_is_coowner,
                 })
         if request.method == 'POST':
             form = GroupFormEdit(request.POST, instance=group)
@@ -316,7 +319,8 @@ def edit(request, group_id):
                     request,'group/editGroup.html', {
                     'form':form,
                     'user_is_owner': user_is_owner,
-                    'user_has_admin_auth': request.user.has_admin_auth(),
+                    'user_has_admin_auth': user_has_admin_auth,
+                    'user_is_coowner': user_is_coowner,
                 })
         else: 
             return None
